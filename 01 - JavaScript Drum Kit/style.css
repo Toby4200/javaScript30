@@ -7,6 +7,7 @@ body,html {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  overflow: hidden
 }
 
 .keys {
@@ -23,7 +24,7 @@ body,html {
   margin:1rem;
   font-size: 1.5rem;
   padding:1rem .5rem;
-  transition:all .07s;
+  transition:all .09s;
   width:100px;
   text-align: center;
   color:white;
@@ -32,9 +33,9 @@ body,html {
 }
 
 .playing {
-  transform:scale(1.1);
-  border-color:#ffc600;
-  box-shadow: 0 0 10px #ffc600;
+  transform:scale(6.1);
+  border-color: green;
+  box-shadow: 0 0 10px green;
 }
 
 kbd {
@@ -46,5 +47,5 @@ kbd {
   font-size: 1.2rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color:#ffc600;
+  color: green;
 }
