@@ -12,7 +12,9 @@
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
+        <div class="romb"></div>
       </div>
+
     </div>
 
 
@@ -44,6 +46,10 @@
       box-shadow:
         0 0 0 4px rgba(0,0,0,0.1),
         inset 0 0 0 3px #EFEFEF,
+        inset 0 0 0 6px #d8efe0,
+        inset 0 0 0 9px #daefd5,
+        inset 0 0 0 12px #aeefaa,
+        inset 0 0 0 15px #87ef85,
         inset 0 0 10px black,
         0 0 10px rgba(0,0,0,0.2);
     }
@@ -53,6 +59,7 @@
       width: 100%;
       height: 100%;
       transform: translateY(-3px); /* account for the height of the clock hands */
+      /*box-shadow: inset 0 0 0px rgba(0,0,0, 0.5);*/
     }
 
     .hand {
@@ -61,13 +68,79 @@
       background:black;
       position: absolute;
       top:50%;
+      transform: rotate(90deg);
+      transform-origin: 100%;
+      transition: all 0.5s cubic-bezier(0.5, -1.09, 0.35, 3.58);
+
+    }
+
+    .romb {
+      position: absolute;
+      top: calc(50% - 1rem);
+      left: calc(50% - 1rem);
+      width: 2rem;
+      height: 2rem;
+      transform: rotate(45deg);
+      background: #fff6f8;
+      border-radius: 20%;
+    }
+
+    .second-hand {
+      background: green;
+    }
+
+    .min-hand {
+      background: red;
+    }
+
+    .hour-hand {
+      background: yellow;
     }
 
   </style>
 
   <script>
+  function setDate() {
+    // static vars
+    const initialRotate = 90;
+    const now = new Date();
+    const defaultTransition = 'all 0.5s cubic-bezier(0.5, -1.09, 0.35, 3.58)';
+    // get current time
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours();
+    // get dom-elements
+    const sHand = document.querySelector('.second-hand');
+    const mHand = document.querySelector('.min-hand');
+    const hHand = document.querySelector('.hour-hand');
+    // calc rotate degree
+    const sDegree = initialRotate + (seconds/60)*360;
+    const mDegree = initialRotate + (minutes/60)*360;
+    const hDegree = initialRotate + (hours/60)*360;
+    // fix rotate backward
+    seconds === 0 ? sHand.style.transition = 'none' : '';
+    minutes === 0 ? mHand.style.transition = 'none' : '';
+    hours === 0 ?   hHand.style.transition = 'none' : '';
+    // set rotate angle
+    sHand.style.transform = `rotate(${ sDegree }deg)`;
+    mHand.style.transform = `rotate(${ mDegree }deg)`;
+    hHand.style.transform = `rotate(${ hDegree }deg)`;
+    //change color of hands
+    if (seconds === minutes) {
+//      console.log('sHand.style.background ==>', sHand.style.background)
+//      sHand.style.background
+//      mHand.style.background
+    } else if(seconds === hours) {
 
+    } else if (minutes === hours) {
 
+    }
+    // set transition
+    seconds > 0 ? sHand.style.transition = defaultTransition : '';
+    minutes > 0 ? mHand.style.transition = defaultTransition : '';
+    hours   > 0 ? hHand.style.transition = defaultTransition : '';
+  }
+  setInterval(setDate, 1000);
   </script>
 </body>
 </html>
