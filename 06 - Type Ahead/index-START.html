@@ -17,6 +17,73 @@
 <script>
 const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
 
+const cities = [];
+
+const promise = fetch(endpoint)
+  .then(blob => {
+    return blob.json();
+  })
+  .then((data) => {
+    cities.push(...data);
+  });
+    /*
+  * Handler of input change
+  */
+  const searchInput = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
+
+  console.log('searchInput', searchInput);
+  console.log('searchInput.addEventListener', searchInput.addEventListener);
+  searchInput.addEventListener('change', displayCities);
+  searchInput.addEventListener('keyup', displayCities);
+
+  /**
+  * insert commas in number
+  */
+  function numberWithComas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  /**
+  * Filter array with inputWord for city & state
+  * @param {string} inputWord - filter cities via self
+  * @param {cities} cities - array with city object
+  */
+  function findMathes(inputWord, cities) {
+    let regex = new RegExp(inputWord, 'gi');
+    return cities.filter((cityObject) => {
+      return cityObject.city.match(regex) || cityObject.state.match(regex);
+    })
+  }
+  /*
+  * Insert list filtered cities
+  */
+  function displayCities(e) {
+    const searchedWord = this.value;
+    //filter array
+    const filteredCities = findMathes(searchedWord, cities);
+    console.log(filteredCities);
+    // set suggestion box
+    const html = filteredCities.map(place => {
+    const regex = new RegExp(this.value, 'gi');
+    const highlightedCityName = place.city.replace(regex, `<span class='hl'>${this.value}</span>`);
+    const highlightedStateName = place.state.replace(regex, `<span class='hl'>${this.value}</span>`);
+
+      return `
+      <li>
+        <span class="name">${ highlightedCityName }, ${ highlightedStateName }</span>
+        <span class="populatio">${ numberWithComas(place.population) }</span>
+      </li>`
+    }).join('');
+
+    suggestions.innerHTML = html;
+  }
+
+// toDo try XMLHttpRequest 
+// const query = new XMLHttpRequest;
+// const ho = query.open('post', 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json')
+
+
 </script>
   </body>
 </html>
